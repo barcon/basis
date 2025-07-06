@@ -20,7 +20,7 @@ namespace basis
 	Cartesian::Cartesian()
 	{
 		origin_ = Vector(dim_, 0.0);
-		basis_ = Matrix(dim_, dim_, 0.0);
+		basis_ = Matrix(dim_, dim_, eilig::matrix_zeros);
 
 		for (Index i = 0; i < dim_; ++i)
 		{
