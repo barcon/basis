@@ -16,10 +16,6 @@ namespace basis
 	using Type = std::size_t;
 	using Index = std::size_t;
 
-	class IBasis;
-	using IBasisPtr = std::shared_ptr<IBasis>;
-	using ConstIBasisPtr = std::shared_ptr<const IBasis>;
-
 	static const Type basis_cartesian = 1;
 	static const Type basis_cylindrical = 2;
 
