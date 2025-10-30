@@ -3,14 +3,47 @@
 
 namespace basis
 {
+	CylindricalPtr CreateBasisCylindrical()
+	{
+		auto res = Cylindrical::Create();
+
+		return res;
+	}
+	CylindricalPtr CreateBasisCylindrical(Tag basisTag)
+	{
+		auto res = Cylindrical::Create();
+
+		res->SetTag(basisTag);
+
+		return res;
+	}
 	Cylindrical::Cylindrical()
 	{
 		origin_ = Vector(dim_, 0.0);
-		basis_ = Matrix(dim_, dim_, eilig::matrix_diagonal);
+		basis_ = Matrix(dim_, dim_, eilig::matrix_zeros);
+
+		for (Index i = 0; i < dim_; ++i)
+		{
+			basis_(i, i) = 1.0;
+		}
 	}
-	Cylindrical::Cylindrical(Tag basisTag) : Cylindrical()
+	CylindricalPtr Cylindrical::Create()
 	{
-		tag_ = basisTag;
+		class MakeSharedEnabler : public Cylindrical
+		{
+		};
+
+		auto res = std::make_shared<MakeSharedEnabler>();
+
+		return res;
+	}
+	CylindricalPtr Cylindrical::GetPtr()
+	{
+		return this->shared_from_this();
+	}
+	ConstCylindricalPtr Cylindrical::GetPtr() const
+	{
+		return const_cast<Cylindrical*>(this)->GetPtr();
 	}
 	Scalar Cylindrical::Distance(const Vector& pt1, const Vector& pt2) const
 	{

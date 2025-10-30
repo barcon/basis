@@ -5,13 +5,21 @@
 
 namespace basis
 {
-	class Cartesian : public IBasis
+	class Cartesian;
+	using CartesianPtr = std::shared_ptr<Cartesian>;
+	using ConstCartesianPtr = std::shared_ptr<const Cartesian>;	
+
+	CartesianPtr CreateBasisCartesian();
+	CartesianPtr CreateBasisCartesian(Tag basisTag);
+	
+	class Cartesian : public IBasis, virtual public std::enable_shared_from_this<Cartesian>
 	{
 	public:
 		virtual ~Cartesian() = default;
 
-		Cartesian();
-		Cartesian(Tag basisTag);
+		static CartesianPtr Create();
+		CartesianPtr GetPtr();
+		ConstCartesianPtr GetPtr() const;
 
 		Scalar Distance(const Vector& pt1, const Vector& pt2) const override;
 		Scalar DistanceSquared(const Vector& pt1, const Vector& pt2) const override;
@@ -33,7 +41,9 @@ namespace basis
 		void SetTag(Tag tag) override;
 
 	protected:
-		Tag tag_{ 0 };
+		Cartesian();
+
+		Tag tag_{ 0 };			
 		Vector origin_;
 		Matrix basis_;
 

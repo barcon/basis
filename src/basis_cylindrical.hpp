@@ -5,13 +5,21 @@
 
 namespace basis
 {
-	class Cylindrical : public IBasis
+	class Cylindrical;
+	using CylindricalPtr = std::shared_ptr<Cylindrical>;
+	using ConstCylindricalPtr = std::shared_ptr<const Cylindrical>;	
+
+	CylindricalPtr CreateBasisCylindrical();
+	CylindricalPtr CreateBasisCylindrical(Tag basisTag);
+	
+	class Cylindrical : public IBasis, virtual public std::enable_shared_from_this<Cylindrical>
 	{
 	public:
 		virtual ~Cylindrical() = default;
 
-		Cylindrical();
-		Cylindrical(Tag basisTag);
+		static CylindricalPtr Create();
+		CylindricalPtr GetPtr();
+		ConstCylindricalPtr GetPtr() const;
 
 		Scalar Distance(const Vector& pt1, const Vector& pt2) const override;
 		Scalar DistanceSquared(const Vector& pt1, const Vector& pt2) const override;
@@ -33,7 +41,9 @@ namespace basis
 		void SetTag(Tag tag) override;
 
 	protected:
-		Tag tag_{ 0 };
+		Cylindrical();
+
+		Tag tag_{ 0 };			
 		Vector origin_;
 		Matrix basis_;
 
