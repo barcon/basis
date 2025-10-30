@@ -43,6 +43,9 @@ namespace basis
 
 		virtual void SetTag(Tag tag) = 0;
 	};
+
+	using IBasisPtr = std::shared_ptr<IBasis>;
+
 } //namespace basis
 
 #endif /* BASIS_TYPE_HPP_ */
