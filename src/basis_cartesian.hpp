@@ -5,10 +5,6 @@
 
 namespace basis
 {
-	class Cartesian;
-	using CartesianPtr = std::shared_ptr<Cartesian>;
-	using ConstCartesianPtr = std::shared_ptr<const Cartesian>;	
-
 	class Cartesian : public IBasis
 	{
 	public:
