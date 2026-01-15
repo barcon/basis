@@ -20,12 +20,7 @@ namespace basis
 	Cylindrical::Cylindrical()
 	{
 		origin_ = Vector(dim_, 0.0);
-		basis_ = Matrix(dim_, dim_, eilig::matrix_zeros);
-
-		for (Index i = 0; i < dim_; ++i)
-		{
-			basis_(i, i) = 1.0;
-		}
+		basis_ = Matrix(dim_, dim_, eilig::matrix_diagonal);
 	}
 	CylindricalPtr Cylindrical::Create()
 	{
@@ -61,7 +56,7 @@ namespace basis
 
 		return res;
 	}
-	Vector Cylindrical::LocalToGlobal(const Vector& pt) const
+	Vector Cylindrical::LocalToGlobalPoint(const Vector& pt) const
 	{
 		Vector cartesian(dim_, 0.0);
 
@@ -81,7 +76,7 @@ namespace basis
 
 		return basis_.Transpose() * cartesian;
 	}
-	Vector Cylindrical::GlobalToLocal(const Vector& pt) const
+	Vector Cylindrical::GlobalToLocalPoint(const Vector& pt) const
 	{
 		Vector local(dim_, 0.0);
 		Scalar radius{ 0.0 };
@@ -139,54 +134,11 @@ namespace basis
 	}
 	void Cylindrical::Rotate(const Axis& axis, Scalar radians)
 	{
-		Matrix rot(3, 3);
-		Scalar cos = std::cos(radians);
-		Scalar sin = std::sin(radians);
-
-		if (axis == eilig::axis_x)
-		{
-			rot(0, 0) = 1.;
-			rot(1, 0) = 0.;
-			rot(2, 0) = 0.;
-
-			rot(0, 1) = 0.;
-			rot(1, 1) = cos;
-			rot(2, 1) = sin;
-
-			rot(0, 2) = 0.;
-			rot(1, 2) = -sin;
-			rot(2, 2) = cos;
-		}
-		else if (axis == eilig::axis_y)
-		{
-			rot(0, 0) = cos;
-			rot(1, 0) = 0.;
-			rot(2, 0) = -sin;
-
-			rot(0, 1) = 0.;
-			rot(1, 1) = 1.;
-			rot(2, 1) = 0.;
-
-			rot(0, 2) = sin;
-			rot(1, 2) = 0.;
-			rot(2, 2) = cos;
-		}
-		else if (axis == eilig::axis_z)
-		{
-			rot(0, 0) = cos;
-			rot(1, 0) = sin;
-			rot(2, 0) = 0.;
-
-			rot(0, 1) = -sin;
-			rot(1, 1) = cos;
-			rot(2, 1) = 0.;
-
-			rot(0, 2) = 0.;
-			rot(1, 2) = 0.;
-			rot(2, 2) = 1.;
-		}
-
-		basis_ = rot.Transpose() * basis_;
+		basis_ = eilig::transform::RotationMatrix(axis, radians).Transpose() * basis_;
+	}
+	void Cylindrical::SetOrigin(const Vector& origin)
+	{
+		origin_ = origin;
 	}
 	void Cylindrical::SetTag(Tag tag)
 	{

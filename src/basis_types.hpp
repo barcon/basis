@@ -30,9 +30,9 @@ namespace basis
 
 		virtual Scalar Distance(const Vector& pt1, const Vector& pt2) const = 0;
 		virtual Scalar DistanceSquared(const Vector& pt1, const Vector& pt2) const = 0;
-		virtual Vector LocalToGlobal(const Vector& pt) const = 0;
+		virtual Vector LocalToGlobalPoint(const Vector& pt) const = 0;
 		virtual Vector LocalToGlobalVector(const Vector& vec) const = 0;
-		virtual Vector GlobalToLocal(const Vector& pt) const = 0;
+		virtual Vector GlobalToLocalPoint(const Vector& pt) const = 0;
 		virtual Vector GlobalToLocalVector(const Vector& vec) const = 0;
 
 		virtual const Matrix& GetBasis() const = 0;
@@ -45,6 +45,7 @@ namespace basis
 		virtual void Offset(const Axis& axis, Scalar delta) = 0;
 		virtual void Rotate(const Axis& axis, Scalar radians) = 0;
 
+		virtual void SetOrigin(const Vector& origin) = 0;
 		virtual void SetTag(Tag tag) = 0;
 	};
 } //namespace basis

@@ -20,12 +20,7 @@ namespace basis
 	Cartesian::Cartesian()
 	{
 		origin_ = Vector(dim_, 0.0);
-		basis_ = Matrix(dim_, dim_, eilig::matrix_zeros);
-
-		for (Index i = 0; i < dim_; ++i)
-		{
-			basis_(i, i) = 1.0;
-		}
+		basis_ = Matrix(dim_, dim_, eilig::matrix_diagonal);
 	}
 	CartesianPtr Cartesian::Create()
 	{
@@ -61,7 +56,7 @@ namespace basis
 
 		return res;
 	}
-	Vector Cartesian::LocalToGlobal(const Vector& pt) const
+	Vector Cartesian::LocalToGlobalPoint(const Vector& pt) const
 	{
 		return origin_ + basis_.Transpose() * pt;
 	}
@@ -69,7 +64,7 @@ namespace basis
 	{
 		return basis_.Transpose() * vec;
 	}
-	Vector Cartesian::GlobalToLocal(const Vector& pt) const
+	Vector Cartesian::GlobalToLocalPoint(const Vector& pt) const
 	{
 		return basis_ * (pt - origin_);
 	}
@@ -108,6 +103,10 @@ namespace basis
 	void Cartesian::Rotate(const Axis& axis, Scalar radians)
 	{
 		basis_ = eilig::transform::RotationMatrix(axis, radians).Transpose() * basis_;
+	}
+	void Cartesian::SetOrigin(const Vector& origin)
+	{
+		origin_ = origin;
 	}
 	void Cartesian::SetTag(Tag tag)
 	{

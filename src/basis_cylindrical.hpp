@@ -23,9 +23,9 @@ namespace basis
 
 		Scalar Distance(const Vector& pt1, const Vector& pt2) const override;
 		Scalar DistanceSquared(const Vector& pt1, const Vector& pt2) const override;
-		Vector LocalToGlobal(const Vector& pt) const override;
+		Vector LocalToGlobalPoint(const Vector& pt) const override;
 		Vector LocalToGlobalVector(const Vector& vec) const override;
-		Vector GlobalToLocal(const Vector& pt) const override;
+		Vector GlobalToLocalPoint(const Vector& pt) const override;
 		Vector GlobalToLocalVector(const Vector& vec) const override;
 		
 		const Matrix& GetBasis() const override;
@@ -38,6 +38,7 @@ namespace basis
 		void Offset(const Axis& axis, Scalar value) override;
 		void Rotate(const Axis& axis, Scalar radians) override;
 		
+		void SetOrigin(const Vector& origin) override;
 		void SetTag(Tag tag) override;
 
 	protected:
