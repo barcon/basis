@@ -3,12 +3,6 @@
 
 namespace basis
 {
-	CartesianPtr CreateBasisCartesian()
-	{
-		auto res = Cartesian::Create();
-
-		return res;
-	}
 	CartesianPtr CreateBasisCartesian(Tag basisTag)
 	{
 		auto res = Cartesian::Create();
@@ -19,26 +13,8 @@ namespace basis
 	}
 	Cartesian::Cartesian()
 	{
-		origin_ = Vector(dim_, 0.0);
-		basis_ = Matrix(dim_, dim_, eilig::matrix_diagonal);
-	}
-	CartesianPtr Cartesian::Create()
-	{
-		class MakeSharedEnabler : public Cartesian
-		{
-		};
-
-		auto res = std::make_shared<MakeSharedEnabler>();
-
-		return res;
-	}
-	CartesianPtr Cartesian::GetPtr()
-	{
-		return this->shared_from_this();
-	}
-	ConstCartesianPtr Cartesian::GetPtr() const
-	{
-		return const_cast<Cartesian*>(this)->GetPtr();
+		origin_ = Vector(numberCoordinates_, 0.0);
+		basis_ = Matrix(numberCoordinates_, numberCoordinates_, eilig::matrix_diagonal);
 	}
 	Scalar Cartesian::Distance(const Vector& pt1, const Vector& pt2) const
 	{
@@ -58,19 +34,19 @@ namespace basis
 	}
 	Vector Cartesian::LocalToGlobalPoint(const Vector& pt) const
 	{
-		return origin_ + basis_.Transpose() * pt;
+		return origin_ + basis_ * pt;
 	}
 	Vector Cartesian::LocalToGlobalVector(const Vector& vec) const
 	{
-		return basis_.Transpose() * vec;
+		return basis_ * vec;
 	}
 	Vector Cartesian::GlobalToLocalPoint(const Vector& pt) const
 	{
-		return basis_ * (pt - origin_);
+		return basis_.Transpose() * (pt - origin_);
 	}
 	Vector Cartesian::GlobalToLocalVector(const Vector& vec) const
 	{
-		return basis_ * vec;
+		return basis_.Transpose() * vec;
 	}
 	const Matrix& Cartesian::GetBasis() const
 	{
@@ -84,9 +60,9 @@ namespace basis
 	{
 		return tag_;
 	}
-	Dimension Cartesian::GetDim() const
+	NumberCoordinates Cartesian::GetNumberCoordinates() const
 	{
-		return dim_;
+		return numberCoordinates_;
 	}
 	Type Cartesian::GetType() const
 	{
@@ -102,7 +78,7 @@ namespace basis
 	}
 	void Cartesian::Rotate(const Axis& axis, Scalar radians)
 	{
-		basis_ = eilig::transform::RotationMatrix(axis, radians).Transpose() * basis_;
+		basis_ = eilig::transform::RotationMatrix(axis, radians) * basis_;
 	}
 	void Cartesian::SetOrigin(const Vector& origin)
 	{

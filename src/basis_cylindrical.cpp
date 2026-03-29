@@ -19,8 +19,8 @@ namespace basis
 	}
 	Cylindrical::Cylindrical()
 	{
-		origin_ = Vector(dim_, 0.0);
-		basis_ = Matrix(dim_, dim_, eilig::matrix_diagonal);
+		origin_ = Vector(numberCoordinates_, 0.0);
+		basis_ = Matrix(numberCoordinates_, numberCoordinates_, eilig::matrix_diagonal);
 	}
 	CylindricalPtr Cylindrical::Create()
 	{
@@ -31,14 +31,6 @@ namespace basis
 		auto res = std::make_shared<MakeSharedEnabler>();
 
 		return res;
-	}
-	CylindricalPtr Cylindrical::GetPtr()
-	{
-		return this->shared_from_this();
-	}
-	ConstCylindricalPtr Cylindrical::GetPtr() const
-	{
-		return const_cast<Cylindrical*>(this)->GetPtr();
 	}
 	Scalar Cylindrical::Distance(const Vector& pt1, const Vector& pt2) const
 	{
@@ -58,31 +50,31 @@ namespace basis
 	}
 	Vector Cylindrical::LocalToGlobalPoint(const Vector& pt) const
 	{
-		Vector cartesian(dim_, 0.0);
+		Vector cartesian(numberCoordinates_, 0.0);
 
 		cartesian(0) = pt(0) * cos(pt(1));
 		cartesian(1) = pt(0) * sin(pt(1));
 		cartesian(2) = pt(2);
 
-		return origin_ + basis_.Transpose() * cartesian;
+		return origin_ + basis_ * cartesian;
 	}
 	Vector Cylindrical::LocalToGlobalVector(const Vector& vec) const
 	{
-		Vector cartesian(dim_, 0.0);
+		Vector cartesian(numberCoordinates_, 0.0);
 
 		cartesian(0) = vec(0) * cos(vec(1));
 		cartesian(1) = vec(0) * sin(vec(1));
 		cartesian(2) = vec(2);
 
-		return basis_.Transpose() * cartesian;
+		return basis_ * cartesian;
 	}
 	Vector Cylindrical::GlobalToLocalPoint(const Vector& pt) const
 	{
-		Vector local(dim_, 0.0);
+		Vector local(numberCoordinates_, 0.0);
 		Scalar radius{ 0.0 };
 		Scalar theta{ 0.0 };
 
-		local = basis_ * (pt - origin_);
+		local = basis_.Transpose()* (pt - origin_);
 		radius = std::sqrt(local(0) * local(0) + local(1) * local(1));
 		theta = std::atan2(local(1), local(0));
 		local(0) = radius;
@@ -92,11 +84,11 @@ namespace basis
 	}
 	Vector Cylindrical::GlobalToLocalVector(const Vector& vec) const
 	{
-		Vector local(dim_, 0.0);
+		Vector local(numberCoordinates_, 0.0);
 		Scalar radius{ 0.0 };
 		Scalar theta{ 0.0 };
 
-		local = basis_ * vec;
+		local = basis_.Transpose()* vec;
 		radius = std::sqrt(local(0) * local(0) + local(1) * local(1));
 		theta = std::atan2(local(1), local(0));
 		local(0) = radius;
@@ -116,9 +108,9 @@ namespace basis
 	{
 		return tag_;
 	}
-	Dimension Cylindrical::GetDim() const
+	NumberCoordinates Cylindrical::GetNumberCoordinates() const
 	{
-		return dim_;
+		return numberCoordinates_;
 	}
 	Type Cylindrical::GetType() const
 	{
@@ -134,7 +126,7 @@ namespace basis
 	}
 	void Cylindrical::Rotate(const Axis& axis, Scalar radians)
 	{
-		basis_ = eilig::transform::RotationMatrix(axis, radians).Transpose() * basis_;
+		basis_ = eilig::transform::RotationMatrix(axis, radians) * basis_;
 	}
 	void Cylindrical::SetOrigin(const Vector& origin)
 	{

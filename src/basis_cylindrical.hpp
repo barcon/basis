@@ -18,8 +18,6 @@ namespace basis
 		virtual ~Cylindrical() = default;
 
 		static CylindricalPtr Create();
-		CylindricalPtr GetPtr();
-		ConstCylindricalPtr GetPtr() const;
 
 		Scalar Distance(const Vector& pt1, const Vector& pt2) const override;
 		Scalar DistanceSquared(const Vector& pt1, const Vector& pt2) const override;
@@ -30,9 +28,9 @@ namespace basis
 		
 		const Matrix& GetBasis() const override;
 		const Vector& GetOrigin() const override;
-		Tag GetTag() const override;
-		Dimension GetDim() const override;		
+		NumberCoordinates GetNumberCoordinates() const override;		
 		Type GetType() const override;	
+		Tag GetTag() const override;
 		
 		void Offset(const Vector& delta) override;
 		void Offset(const Axis& axis, Scalar value) override;
@@ -48,7 +46,7 @@ namespace basis
 		Vector origin_;
 		Matrix basis_;
 
-		const Dimension dim_{ 3 };
+		const NumberCoordinates numberCoordinates_{ 3 };
 		const Type type_{basis_cylindrical};
 	};
 	
