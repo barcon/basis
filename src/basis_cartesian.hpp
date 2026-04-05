@@ -16,7 +16,7 @@ namespace basis
 	public:
 		virtual ~Cartesian() = default;
 
-		static CartesianPtr Create();;
+		static CartesianPtr Create();
 
 		Scalar Distance(const Vector& pt1, const Vector& pt2) const override;
 		Scalar DistanceSquared(const Vector& pt1, const Vector& pt2) const override;

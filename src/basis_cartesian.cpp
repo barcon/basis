@@ -16,6 +16,16 @@ namespace basis
 		origin_ = Vector(numberCoordinates_, 0.0);
 		basis_ = Matrix(numberCoordinates_, numberCoordinates_, eilig::matrix_diagonal);
 	}
+	CartesianPtr Cartesian::Create()
+	{
+		class MakeSharedEnabler : public Cartesian
+		{
+		};
+
+		auto res = std::make_shared<MakeSharedEnabler>();
+
+		return res;
+	}
 	Scalar Cartesian::Distance(const Vector& pt1, const Vector& pt2) const
 	{
 		Vector dif = pt2 - pt1;
