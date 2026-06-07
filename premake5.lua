@@ -12,6 +12,7 @@ project "basis"
 	includedirs { "../utils/src" }	
 	includedirs { "../logger/src" }	
 	includedirs { "../eilig/src" }	
+    includedirs { "../thread-pool/include" }	
 
 	files { "src/**.hpp", "src/**.cpp" }
 
