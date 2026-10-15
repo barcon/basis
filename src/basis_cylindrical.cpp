@@ -20,7 +20,7 @@ namespace basis
 	Cylindrical::Cylindrical()
 	{
 		origin_ = Vector(numberCoordinates_, 0.0);
-		basis_ = Matrix(numberCoordinates_, numberCoordinates_, eilig::matrix_diagonal);
+		basis_ = Matrix(numberCoordinates_, numberCoordinates_, MatrixType::diagonal);
 	}
 	CylindricalPtr Cylindrical::Create()
 	{
@@ -112,7 +112,7 @@ namespace basis
 	{
 		return numberCoordinates_;
 	}
-	Type Cylindrical::GetType() const
+	BasisType Cylindrical::GetType() const
 	{
 		return type_;
 	}
@@ -122,7 +122,7 @@ namespace basis
 	}
 	void Cylindrical::Offset(const Axis& axis, Scalar delta)
 	{
-		origin_(axis) = origin_(axis) + delta;
+		origin_(static_cast<Index>(axis)) = origin_(static_cast<Index>(axis)) + delta;
 	}
 	void Cylindrical::Rotate(const Axis& axis, Scalar radians)
 	{

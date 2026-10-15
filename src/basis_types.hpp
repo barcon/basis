@@ -6,24 +6,18 @@
 
 namespace basis
 {
-	using Axis = eilig::Axis;
-	using Scalar = eilig::Scalar;
-	using Vector = eilig::Vector;
-	using Matrix = eilig::Matrix;
-
-	using Tag = std::size_t;
-	using Type = std::size_t;
-	using Index = std::size_t;
-
-	using Number = std::size_t;
+	using namespace eilig;
 	using NumberCoordinates = Number;
 
 	class IBasis;
 	using IBasisPtr = std::shared_ptr<IBasis>;
 	using ConstIBasisPtr = std::shared_ptr<const IBasis>;
 
-	static const Type basis_cartesian = 1;
-	static const Type basis_cylindrical = 2;
+	enum class BasisType
+	{
+		cartesian = 0,
+		cylindrical = 1
+	};
 
 	class IBasis
 	{
@@ -40,7 +34,7 @@ namespace basis
 		virtual const Matrix& GetBasis() const = 0;
 		virtual const Vector& GetOrigin() const = 0;
 		virtual NumberCoordinates GetNumberCoordinates() const = 0;
-		virtual Type GetType() const = 0;
+		virtual BasisType GetType() const = 0;
 		virtual Tag GetTag() const = 0;
 		
 		virtual void Offset(const Vector& delta) = 0;

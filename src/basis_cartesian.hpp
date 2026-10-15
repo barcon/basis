@@ -28,7 +28,7 @@ namespace basis
 		const Matrix& GetBasis() const override;
 		const Vector& GetOrigin() const override;
 		NumberCoordinates GetNumberCoordinates() const override;
-		Type GetType() const override;
+		BasisType GetType() const override;
 		Tag GetTag() const override;
 		
 		void Offset(const Vector& delta) override;
@@ -46,7 +46,7 @@ namespace basis
 		Matrix basis_;
 
 		const NumberCoordinates numberCoordinates_{ 3 };
-		const Type type_{basis_cartesian};
+		const BasisType type_{ BasisType::cartesian};
 	};
 	
 } //namespace basis

@@ -14,7 +14,7 @@ namespace basis
 	Cartesian::Cartesian()
 	{
 		origin_ = Vector(numberCoordinates_, 0.0);
-		basis_ = Matrix(numberCoordinates_, numberCoordinates_, eilig::matrix_diagonal);
+		basis_ = Matrix(numberCoordinates_, numberCoordinates_, MatrixType::diagonal);
 	}
 	CartesianPtr Cartesian::Create()
 	{
@@ -74,7 +74,7 @@ namespace basis
 	{
 		return numberCoordinates_;
 	}
-	Type Cartesian::GetType() const
+	BasisType Cartesian::GetType() const
 	{
 		return type_;
 	}
@@ -84,7 +84,7 @@ namespace basis
 	}
 	void Cartesian::Offset(const Axis& axis, Scalar delta)
 	{
-		origin_(axis) = origin_(axis) + delta;
+		origin_(static_cast<Index>(axis)) = origin_(static_cast<Index>(axis)) + delta;
 	}
 	void Cartesian::Rotate(const Axis& axis, Scalar radians)
 	{
